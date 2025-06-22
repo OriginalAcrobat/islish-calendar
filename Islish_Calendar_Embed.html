@@ -1,0 +1,136 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Islish Calendar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=Cormorant+Garamond:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Cormorant Garamond', serif;
+      background-color: #e8e2ce;
+      background-size: cover;
+      background-position: center;
+      transition: background-image 1s ease;
+    }
+    #calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      padding: 40px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .day-cell {
+      background: rgba(255,255,255,0.7);
+      border: 1px solid #7b5d2d;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      position: relative;
+      font-size: 16px;
+    }
+    .day-cell .day-name {
+      font-family: 'Uncial Antiqua', cursive;
+      color: #3a593a;
+      font-size: 14px;
+    }
+    .day-cell .day-number {
+      font-weight: bold;
+      font-size: 18px;
+      color: #3a593a;
+    }
+    .day-cell .event-button {
+      background: none;
+      border: none;
+      color: #3a2f1a;
+      font-size: 15px;
+      font-family: 'Cormorant Garamond', serif;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+    .day-cell img {
+      width: 28px;
+      margin-top: 4px;
+    }
+    #lorePopup {
+      display: none;
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background: #223318;
+      color: #fdfdfd;
+      border-radius: 12px;
+      padding: 20px;
+      z-index: 999;
+      width: 60%;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+      font-family: 'Cormorant Garamond', serif;
+    }
+    #loreTitle {
+      font-family: 'Uncial Antiqua', cursive;
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    #loreType {
+      font-style: italic;
+      margin-bottom: 8px;
+    }
+    #loreText {
+      font-size: 16px;
+    }
+    #closeLore {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      cursor: pointer;
+      color: #fff;
+      font-size: 18px;
+    }
+    #header {
+      text-align: center;
+      padding: 20px;
+      font-size: 40px;
+      font-family: 'Uncial Antiqua', cursive;
+      color: #3a593a;
+    }
+    #controls {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    #controls button {
+      font-family: 'Uncial Antiqua', cursive;
+      background: #7b5d2d;
+      color: #fff;
+      padding: 6px 12px;
+      margin: 0 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<div id="header">Islish Calendar</div>
+<div id="controls">
+  <button onclick="changeMonth(-1)">⟵</button>
+  <span id="monthLabel">Month</span>
+  <button onclick="changeMonth(1)">⟶</button>
+</div>
+<div id="calendar"></div>
+
+<div id="lorePopup">
+  <div id="closeLore" onclick="document.getElementById('lorePopup').style.display='none'">✖</div>
+  <div id="loreTitle"></div>
+  <div id="loreType"></div>
+  <img id="loreIcon" src="" style="height:40px;"><br><br>
+  <div id="loreText"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/OpenAI-DevTools/islish-calendar-assets@main/calendarData.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/OpenAI-DevTools/islish-calendar-assets@main/calendarLogic.js"></script>
+</body>
+</html>
