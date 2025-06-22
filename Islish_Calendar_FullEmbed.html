@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Islish Calendar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=Cormorant+Garamond:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Cormorant Garamond', serif;
+      background: url('https://static.wixstatic.com/media/28b6be_905f6cac98dc4304b70e6b0f3fcacd9e~mv2.png') no-repeat center center fixed;
+      background-size: cover;
+    }
+    #calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      padding: 30px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .day-cell {
+      background: rgba(255,255,255,0.75);
+      border: 1px solid #7b5d2d;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      font-size: 16px;
+    }
+    .day-name {
+      font-family: 'Uncial Antiqua', cursive;
+      color: #3a593a;
+      font-size: 14px;
+    }
+    .day-number {
+      font-weight: bold;
+      font-size: 18px;
+      color: #3a593a;
+    }
+    .event-button {
+      background: none;
+      border: none;
+      color: #3a2f1a;
+      font-size: 15px;
+      font-family: 'Cormorant Garamond', serif;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+    .day-cell img {
+      width: 26px;
+      margin-top: 4px;
+    }
+    #lorePopup {
+      display: none;
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background: #223318;
+      color: #fdfdfd;
+      border-radius: 12px;
+      padding: 20px;
+      z-index: 999;
+      width: 60%;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+      font-family: 'Cormorant Garamond', serif;
+    }
+    #loreTitle {
+      font-family: 'Uncial Antiqua', cursive;
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    #loreType {
+      font-style: italic;
+      margin-bottom: 8px;
+    }
+    #loreText {
+      font-size: 16px;
+    }
+    #closeLore {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      cursor: pointer;
+      color: #fff;
+      font-size: 18px;
+    }
+    #header {
+      text-align: center;
+      padding: 20px 0;
+      font-size: 40px;
+      font-family: 'Uncial Antiqua', cursive;
+      color: #3a593a;
+    }
+    #controls {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    #controls button {
+      font-family: 'Uncial Antiqua', cursive;
+      background: #7b5d2d;
+      color: #fff;
+      padding: 6px 12px;
+      margin: 0 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<div id="header">Islish Calendar</div>
+<div id="controls">
+  <button onclick="changeMonth(-1)">⟵</button>
+  <span id="monthLabel">Ceolraidhe</span>
+  <button onclick="changeMonth(1)">⟶</button>
+</div>
+<div id="calendar"></div>
+
+<div id="lorePopup">
+  <div id="closeLore" onclick="document.getElementById('lorePopup').style.display='none'">✖</div>
+  <div id="loreTitle">Event Title</div>
+  <div id="loreType">Event Type</div>
+  <img id="loreIcon" src="" style="height:40px;"><br><br>
+  <div id="loreText">Event lore goes here.</div>
+</div>
+
+<script>
+const months = [
+  "Ceolraidhe", "Eilireach", "Béaltach", "Tuilmhin", "Luainreach", "Faoltide",
+  "Athrúir", "Críochach", "Geamhrath", "Scáilead", "Solasraith", "Caite"
+];
+const dayNames = ["Scáthday", "Éannday", "Túrnday", "Larthday", "Féilday", "Sollunday", "Tráthday"];
+const events = {
+  "Ceolraidhe-1": { title: "Awakening", type: "Myth", lore: "First return of song.", icon: "https://static.wixstatic.com/media/28b6be_44c950ccbbea4e7f8a5ae0dd92948136~mv2.png" },
+  "Ceolraidhe-10": { title: "Thread-Keeping", type: "Mercian", lore: "Remembering the dead by name, and by light.", icon: "https://static.wixstatic.com/media/28b6be_90ec3cd1b44047b9b4bcf23d85bae807~mv2.png" },
+  "Ceolraidhe-20": { title: "Paul & Jordan's Birthday", type: "Birthday", lore: "Marked by fire and thread.", icon: "https://static.wixstatic.com/media/28b6be_37b5b3b7e7b849c88c8df910ff150787~mv2.png" }
+};
+let currentMonthIndex = 0;
+
+function changeMonth(direction) {
+  currentMonthIndex = (currentMonthIndex + direction + months.length) % months.length;
+  document.getElementById("monthLabel").innerText = months[currentMonthIndex];
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const calendar = document.getElementById("calendar");
+  calendar.innerHTML = "";
+  const daysInMonth = 31;
+  for (let i = 1; i <= daysInMonth; i++) {
+    const key = `${months[currentMonthIndex]}-${i}`;
+    const event = events[key];
+    const dayCell = document.createElement("div");
+    dayCell.className = "day-cell";
+
+    const dayName = document.createElement("div");
+    dayName.className = "day-name";
+    dayName.textContent = dayNames[(i - 1) % 7];
+    dayCell.appendChild(dayName);
+
+    const dayNumber = document.createElement("div");
+    dayNumber.className = "day-number";
+    dayNumber.textContent = i.toString();
+    dayCell.appendChild(dayNumber);
+
+    if (event) {
+      const eventBtn = document.createElement("button");
+      eventBtn.className = "event-button";
+      eventBtn.textContent = event.title;
+      eventBtn.onclick = () => {
+        document.getElementById("loreTitle").textContent = event.title;
+        document.getElementById("loreType").textContent = event.type;
+        document.getElementById("loreText").textContent = event.lore;
+        document.getElementById("loreIcon").src = event.icon || "";
+        document.getElementById("lorePopup").style.display = "block";
+      };
+      dayCell.appendChild(eventBtn);
+
+      if (event.icon) {
+        const img = document.createElement("img");
+        img.src = event.icon;
+        dayCell.appendChild(img);
+      }
+    }
+
+    calendar.appendChild(dayCell);
+  }
+}
+renderCalendar();
+</script>
+</body>
+</html>
